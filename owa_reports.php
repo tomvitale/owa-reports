@@ -4,21 +4,26 @@
 	<title>Statistiche OWA</title>
 	<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Droid Sans'>
 	<style>
-	body {
+	* {
 		font-family: 'Droid Sans';
 		font-size: 16px;
 	}
 	
 	select, input, button {
-		font-family: 'Droid Sans';
-		font-size: 16px;
 		font-weight: bold;
+	}
+	
+	pre {
+		display: inline;
+		margin: 0;
 	}
 	</style>
 </head>
 <body>
 
 <?php
+//conf vars
+$max_results = "1000";
 
 //connect to database and made a first query for select sites
 $db_host = "localhost"; // host name of the server housing the database
@@ -44,25 +49,33 @@ if ($result_sites->num_rows > 0) {
 }
 	
 //check and initialize GET vars and make sql call
+// ?site_id=2fda3234&uri=path-name&date_start=20230101&date_end=20230131
 if (isset($_GET['site_id'])) {
 	$site_id = $_GET['site_id'];
 	$uri = $_GET['uri'];
 	$date_start = $_GET['date_start'];
 	$date_end = $_GET['date_end'];
 		
-  //SELECT * FROM `owa_request` JOIN `owa_document` WHERE `owa_request`.`site_id` = '1234567890' AND `yyyymmdd` BETWEEN 20230101 AND 20230103 AND `owa_request`.`document_id` = `owa_document`.`id` AND `owa_document`.`uri` LIKE '%%' order by `owa_document`.`id`
+	//SELECT * FROM `owa_request` JOIN `owa_document` WHERE `owa_request`.`site_id` = '1234567890' AND `yyyymmdd` BETWEEN 20230101 AND 20230103 AND `owa_request`.`document_id` = `owa_document`.`id` AND `owa_document`.`uri` LIKE '%%' order by `owa_document`.`id`
 	$sql_pageviews = "SELECT * FROM `owa_request` JOIN `owa_document` WHERE `owa_request`.`site_id` = '".$site_id."' AND `yyyymmdd` BETWEEN ".$date_start." AND ".$date_end." AND `owa_request`.`document_id` = `owa_document`.`id` AND `owa_document`.`uri` LIKE '%".$uri."%'";
 	$result_pageviews = $conn->query($sql_pageviews);
 	$result_pageviews_rows = $result_pageviews->num_rows;
 		
-  //SELECT * FROM `owa_request` JOIN `owa_document` WHERE `owa_request`.`site_id` = '1234567890' AND `yyyymmdd` BETWEEN 20230101 AND 20230103 AND `owa_request`.`document_id` = `owa_document`.`id` AND `owa_document`.`uri` LIKE '%lucretia-borgia%' group by `owa_request`.`ip_address`
+	//SELECT * FROM `owa_request` JOIN `owa_document` WHERE `owa_request`.`site_id` = '1234567890' AND `yyyymmdd` BETWEEN 20230101 AND 20230103 AND `owa_request`.`document_id` = `owa_document`.`id` AND `owa_document`.`uri` LIKE '%lucretia-borgia%' group by `owa_request`.`ip_address`
 	$sql_visits = "SELECT * FROM `owa_request` JOIN `owa_document` WHERE `owa_request`.`site_id` = '".$site_id."' AND `yyyymmdd` BETWEEN ".$date_start." AND ".$date_end." AND `owa_request`.`document_id` = `owa_document`.`id` AND `owa_document`.`uri` LIKE '%".$uri."%' group by `owa_request`.`ip_address`";
 	$result_visits = $conn->query($sql_visits);
-
+	$result_visits_rows = $result_visits->num_rows;
+	
+	//SELECT * FROM `owa_request` JOIN `owa_document` WHERE `owa_request`.`site_id` = '1234567890' AND `yyyymmdd` BETWEEN 20230322 AND 20230329 AND `owa_request`.`document_id` = `owa_document`.`id` AND `owa_document`.`uri` LIKE '%%' group by `owa_document`.`url`
+	$sql_uniquepage = "SELECT * FROM `owa_request` JOIN `owa_document` WHERE `owa_request`.`site_id` = '".$site_id."' AND `yyyymmdd` BETWEEN ".$date_start." AND ".$date_end." AND `owa_request`.`document_id` = `owa_document`.`id` AND `owa_document`.`uri` LIKE '%".$uri."%' group by `owa_document`.`url`";
+	$result_uniquepage = $conn->query($sql_uniquepage);
+	$result_uniquepage_rows = $result_uniquepage->num_rows;
+	
   if ($result_pageviews->num_rows > 0) {
 	  // output data of each row
-	  $sql_result_pageviews = '<span id=result>'.$result_pageviews_rows." Page Views | ".$result_visits->num_rows." Visits</span><br/><br/>\n";
-	  if ($result_pageviews->num_rows < 1000) {
+	  $sql_result_pageviews = '<span id=result>'.$result_pageviews_rows." Page Views | ".$result_visits_rows." Visits | ".$result_uniquepage_rows." Unique Page Views</span><br/><br/>\n";
+	  $sql_result_pageviews .= "<pre>Date                            | Uri </pre><br/>";
+	  if ($result_pageviews->num_rows < $max_results) {
 		  while($row = $result_pageviews->fetch_assoc()) {
 			$sql_result_pageviews .= gmdate("Y-m-d H:i:s", $row["timestamp"])." | ". $row["uri"]."<br/>\n";
 		  }
@@ -110,7 +123,7 @@ $day_select='<select id="select_date" onchange="selectDate()">
 </select>';
 	
 //Display input form
-echo '<form action="./stats.php" method="get" id="form_stats">
+echo '<form action="?" method="get" id="form_stats">
 '.$sites_select.'
 	<label for="uri">Uri:</label>
 	<input type="text" id="uri" name="uri" size="12" value="'.$uri.'"> | 
@@ -123,7 +136,7 @@ echo '<form action="./stats.php" method="get" id="form_stats">
 </form>';
 
 //Display result
-echo $sql_pageviews."<br>".$sql_visits."<br>";
+//echo $sql_pageviews."<br>".$sql_visits."<br>";
 echo "<br>\n".$sql_result_pageviews."<br><br>\n";
 
 ?>
