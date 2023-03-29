@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Statistiche OWA</title>
-	<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Droid Sans'>
-	<style>
+<title>Statistiche OWA</title>
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Droid Sans'>
+<style>
 	* {
 		font-family: 'Droid Sans';
 		font-size: 16px;
@@ -17,7 +17,7 @@
 		display: inline;
 		margin: 0;
 	}
-	</style>
+</style>
 </head>
 <body>
 
