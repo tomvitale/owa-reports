@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Statistiche OWA</title>
-	<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Droid Sans'>
-	<style>
-	* {
-		font-family: 'Droid Sans';
-		font-size: 16px;
-	}
-	
-	select, input, button {
-		font-weight: bold;
-	}
+<title>OWA Reports</title>
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Droid Sans'>
+<style>
+* {
+	font-family: 'Droid Sans';
+	font-size: 16px;
+}
 
-	pre {
-		display: inline;
-		margin: 0;
-	}
-	</style>
+select, input, button {
+	font-weight: bold;
+}
+
+pre {
+	display: inline;
+	margin: 0;
+}
+</style>
+
 </head>
 <body>
 
@@ -146,7 +147,7 @@ echo '<form action="?" method="get" id="form_stats">
 </form>';
 
 //Display result
-echo "\n".$sql_visits."<br>\n".$sql_uniquevisitor."<br>\n".$sql_pageviews."<br>\n";
+//echo "\n".$sql_visits."<br>\n".$sql_uniquevisitor."<br>\n".$sql_pageviews."<br>\n";
 echo "<br>\n".$sql_result_pageviews."<br><br>\n";
 
 //} else {
