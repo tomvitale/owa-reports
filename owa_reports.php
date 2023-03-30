@@ -22,15 +22,20 @@
 <body>
 
 <?php
+//check IP
+//$IpClient = str_getcsv($_SERVER['REMOTE_ADDR'], ".");
+//$IpClientSottorete = $IpClient[0]."-".$IpClient[1]."-".$IpClient[2];
+//if($IpClientSottorete == "192-168-1" || $IpClientSottorete == "192-168-2"){
 
 //conf vars
+require_once('owa-config.php');
 $max_results = "1000";
 
 //connect to database and made a first query for select sites
-$db_host = "localhost"; // host name of the server housing the database
-$db_user = "dbuser"; // database user
-$db_psw = "dbpassword"; // database user's password
-$db_name = "dbname"; // name of the database
+$db_host = OWA_DB_HOST; // host name of the server housing the database
+$db_user = OWA_DB_USER; // database user
+$db_psw = OWA_DB_PASSWORD; // database user's password
+$db_name = OWA_DB_NAME; // name of the database
 
 // Create connection
 $conn = new mysqli($db_host, $db_user, $db_psw, $db_name);
@@ -143,6 +148,10 @@ echo '<form action="?" method="get" id="form_stats">
 //Display result
 echo "\n".$sql_visits."<br>\n".$sql_uniquevisitor."<br>\n".$sql_pageviews."<br>\n";
 echo "<br>\n".$sql_result_pageviews."<br><br>\n";
+
+//} else {
+//	echo "<h2>Not authorized</h2>";
+//} //end if check IP address
 
 ?>
 
