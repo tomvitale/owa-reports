@@ -1,5 +1,7 @@
 # owa-stats
-Open-Web-Analytics sql stats. Use basic sql queries to interrogate the database with uri and date filter with preset dates.
+Open-Web-Analytics stats. Use basic sql queries to interrogate the database with uri and date filter with preset dates.
+
+Open-Web-Analytics Github repo: **https://github.com/Open-Web-Analytics/Open-Web-Analytics/**
 
 ## Installation
 Download the file into the owa installation folder and the script get automatically from owa-config.php the information to connect to MySQL database.
